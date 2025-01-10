@@ -3,7 +3,7 @@
 ## Description
 This project involves docs for running the LSMS code. A Docker image has been created to run the project on x86 machines, specifically tested on Amarillo.
 
-## Steps to Run the Project
+## Steps to Run the Project for CPU only (Use DockerFile: Dockerfile-cpu)
 
 ### 1. Build the Docker Image
 To build the Docker image, execute the following command in the directory containing the Dockerfile:
@@ -37,6 +37,43 @@ This directory contains multiple workloads. Navigate to the specific directory w
 Run the LSMS simulation with the following command:
 ```bash
 mpirun --allow-run-as-root -np 1 /usr/src/app/build_lsms/bin/lsms i_lsms
+```
+
+Ensure the `i_lsms` file is present in the current directory before running the command.
+
+## Steps to Run the Project for GPU (Use DockerFile: Dockerfile-gpu)
+
+### 1. Build the Docker Image
+To build the Docker image, execute the following command in the directory containing the Dockerfile:
+```bash
+docker build -t lsms-gpu .
+```
+
+### 2. Run the Docker Container
+```bash
+docker run --gpus all -dit --name lsms-container lsms-gpu
+```
+
+### 3. Open Bash in the Docker Container
+Access the container’s bash shell:
+```bash
+docker exec -it <container_id> bash
+```
+Replace `<container_id>` with the actual container ID or name.
+
+### 4. Navigate to Configuration Files
+Once inside the container, navigate to the directory containing configuration files:
+```bash
+cd /usr/src/app/lsms/Test/
+```
+
+### 5. Select the Workload Directory
+This directory contains multiple workloads. Navigate to the specific directory with the `i_lsms` file for your desired element.
+
+### 6. Run the LSMS Project
+Run the LSMS simulation with the following command:
+```bash
+/usr/src/app/build_lsms/bin/lsms i_lsms
 ```
 
 Ensure the `i_lsms` file is present in the current directory before running the command.

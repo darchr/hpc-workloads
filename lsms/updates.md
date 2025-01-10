@@ -10,7 +10,7 @@
   lsms/Test/Summit-Acceptance/FePt/i-lsms
   ```
 - According to the configuration file, the workload executes **50 iterations**.
-  - Each iteration takes approximately **5 minutes** to complete.
+  - Each iteration takes approximately **20 minutes** to complete.
   - The workload is designed for **2 atoms**.
 - Command used:
   ```bash
@@ -20,7 +20,7 @@
 ### **Multi-Core Execution**
 - Attempted to run the code using **10 cores**.
   - Command executed successfully.
-  - However, **no speedup** was observed; each iteration still takes ~5 minutes to complete.
+  - However, **no speedup** was observed; each iteration still takes ~20 minutes to complete.
 
 ### **Segmentation Fault Issue**
 - After a few iterations in the multi-core environment, the following error was encountered:
@@ -43,3 +43,14 @@
    - Check memory usage and thread synchronization.
    - Review the MPI setup and configuration.
 3. Explore running the code on a **GPU-enabled machine** to evaluate performance improvements.
+
+## Update from Last Issue
+- Found out why speedup was not there: according to the code, you can only use less than or equal to the number of cores as `num_atoms`.
+- **Segmentation fault** is no longer occurring when running based on the above constraint.
+- Successfully ran the code in a **GPU setup** and observed significant speedup in the system.
+
+#### Performance Comparisons:
+- **1 interaction, 2 atoms, 1 CPU:** 19:30
+- **1 interaction, 2 atoms, 2 CPUs:** 13:04
+- **5 interactions, 2 atoms, with GPU:** 40.30 sec
+- **28 interactions, 2 atoms, with GPU:** 214.55 sec
