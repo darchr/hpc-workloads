@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  ubuntu_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: qmcpack_container_NVIDIA
+    #deploy:
+    #  resources:
+    #    reservations:
+    #      devices:
+    #        - driver: nvidia
+    #          count: -1
+    #          capabilities: [gpu]
+    #runtime: nvidia
+    working_dir: /app
+    # Optional port mapping (uncomment if your app needs it)
+    #ports:
+    #  - "8001:8000"
+    #  - "81:80"
+    #  - "3001:3000"
+    #  - "7001:7000"
+
+    environment:
+      - DEBIAN_FRONTEND=noninteractive
+    command: ["tail", "-f", "/dev/null"]
