@@ -41,7 +41,7 @@ mpirun --allow-run-as-root -np 1 /usr/src/app/build_lsms/bin/lsms i_lsms
 
 Ensure the `i_lsms` file is present in the current directory before running the command.
 
-## Steps to Run the Project for GPU (Use DockerFile: Dockerfile-gpu)
+## Steps to Run the Project for GPU (Use DockerFile: Dockerfile-gpu-nvidia)
 
 ### 1. Build the Docker Image
 To build the Docker image, execute the following command in the directory containing the Dockerfile:

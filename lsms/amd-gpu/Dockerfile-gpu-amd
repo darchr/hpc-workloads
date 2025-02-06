@@ -1,0 +1,56 @@
+FROM rocm_gpu:6.3
+
+RUN mkdir /data
+
+ARG HDF5_BRANCH="hdf5-1_14_1"
+ENV HDF5_HOME=/opt/hdf5
+
+# Install dependencies and build HDF5
+RUN apt update && apt install -y git
+WORKDIR /tmp
+RUN git clone --recursive https://github.com/HDFGroup/hdf5.git -b ${HDF5_BRANCH} \
+   && cd hdf5 \
+   && CC=mpicc ./configure --prefix=$HDF5_HOME --enable-parallel \
+   && make -j 20 \
+   && make install \
+   && cd /tmp \
+   && rm -rf hdf5
+
+# Set environment variables
+ENV PATH=/opt/qmcpack/bin:$PATH:$HDF5_HOME/bin:$PATH \
+    LD_LIBRARY_PATH=$HDF5_HOME/lib:$LD_LIBRARY_PATH \
+    LIBRARY_PATH=$HDF5_HOME/lib:$LIBRARY_PATH \
+    C_INCLUDE_PATH=$HDF5_HOME/include:$C_INCLUDE_PATH \
+    CPLUS_INCLUDE_PATH=$HDF5_HOME/include:$CPLUS_INCLUDE_PATH \
+    PKG_CONFIG_PATH=$HDF5_HOME/lib/pkgconfig:$PKG_CONFIG_PATH \
+    HSA_XNACK=1 \
+    OMPX_APU_MAPS=1 \
+    OMP_NUM_THREADS=4 \
+    AMDDeviceLibs_DIR=$ROCM_PATH/lib/cmake \
+    PYTHONPATH=/tmp/qmcpack/nexus/lib:$PYTHONPATH
+
+# Install additional dependencies
+RUN apt-get update && \
+    apt-get install -y libopenblas-dev libfftw3-dev libxml2-dev libboost-dev libreadline-dev
+
+# Clone and build LSMS
+WORKDIR /opt
+RUN git clone https://github.com/mstsuite/lsms.git
+COPY ./toolchain/hpcfund-rocm-hip.cmake /opt/lsms/toolchain/hpcfund-rocm-hip.cmake
+
+WORKDIR /opt/lsms
+RUN mkdir build
+WORKDIR /opt/lsms/build
+
+RUN cmake -DCMAKE_TOOLCHAIN_FILE="../toolchain/hpcfund-rocm-hip.cmake" \
+    -DCMAKE_CXX_COMPILER=/opt/rocm/bin/hipcc \
+    -DCMAKE_C_COMPILER=/opt/rocm/bin/hipcc \
+    -DBLAS_LIBRARIES=/usr/lib/x86_64-linux-gnu/libopenblas.so \
+    -DLAPACK_LIBRARIES=/usr/lib/x86_64-linux-gnu/libopenblas.so ..
+
+RUN cmake --build . --parallel
+
+# Add binary to path
+ENV PATH=/opt/lsms/build/bin:$PATH
+
+CMD ["/bin/bash"]
