@@ -6,14 +6,14 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: qmcpack_container_NVIDIA
-    #deploy:
-    #  resources:
-    #    reservations:
-    #      devices:
-    #        - driver: nvidia
-    #          count: -1
-    #          capabilities: [gpu]
-    #runtime: nvidia
+    deploy:
+     resources:
+       reservations:
+         devices:
+           - driver: nvidia
+             count: -1
+             capabilities: [gpu]
+    runtime: nvidia
     working_dir: /app
     # Optional port mapping (uncomment if your app needs it)
     #ports:

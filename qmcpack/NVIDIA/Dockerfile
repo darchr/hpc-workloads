@@ -41,7 +41,7 @@ RUN git clone https://github.com/QMCPACK/qmcpack.git .
 # Set the working directory inside the container
 WORKDIR /app
 # Expose ports (optional based on requirements)
-EXPOSE 8000 80 3000 7000
+# EXPOSE 8000 80 3000 7000
 # Command to keep the container running
 CMD ["tail", "-f", "/dev/null"]
 
