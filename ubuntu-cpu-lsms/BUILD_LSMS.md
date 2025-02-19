@@ -69,7 +69,7 @@ This is the actual script which installs all the dependencies. All I did was bas
 
 ## Building
 
-You can run `./build-X86.sh 22.04` to build this disk image to run on ubuntu 22.04.
+You can run `./build-x86.sh 22.04` to build this disk image to run on ubuntu 22.04.
 
 ## File directory
 
