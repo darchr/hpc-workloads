@@ -13,18 +13,27 @@ First, build the base ROCm GPU image that provides the fundamental GPU and MPI s
 Run the following command to build the base ROCm Docker image:
 
 ```bash
-docker build -t rocm_gpu:6.3 -f /path/to/Dockerfile-rocm-base .
+docker build -f Dockerfile.rocm-base -t rocm_gpu:6.3 .
 ```
 
 ### 2. Building the LSMS Docker Image
 
-- Before building the LSMS Docker image, you need to create cmake file same as ```hpcfund-rocm-hip.cmake``` (Add a target architecture in cmake file, e.g: gfx90a, gfx942, gfx906)
+- Before building the LSMS Docker image, you need to create cmake file same as `hpcfund-rocm-hip.cmake` (Add a target architecture in cmake file, e.g: gfx90a, gfx942, gfx906)
 
-- Run build command ``` docker build -t lsms-amd-gpu . ```
+- Run build command
 
-- Run container with command ``` docker run --rm -it --device=/dev/kfd --device=/dev/dri/renderD128 --group-add video lsms-amd-gpu ```
+```bash
+docker build -f Dockerfile.gpu-amd -t lsms-amd-gpu .
+```
 
-- You will be in exec terminal inside container after this. In this container go to path for element i_lsms file.
+- Run container in integrated mode (open container shell)
 
-- Run simulation with command ``` /opt/lsms/build/lsms i_lsms ```
+```bash
+docker run --rm -it --device=/dev/kfd --device=/dev/dri/renderD128 --group-add video lsms-amd-gpu
+```
 
+- Find simulation with i_lsms file. Run simulation with command.
+
+```bash
+/opt/lsms/build/lsms i_lsms
+```

@@ -9,12 +9,12 @@ ENV HDF5_HOME=/opt/hdf5
 RUN apt update && apt install -y git
 WORKDIR /tmp
 RUN git clone --recursive https://github.com/HDFGroup/hdf5.git -b ${HDF5_BRANCH} \
-   && cd hdf5 \
-   && CC=mpicc ./configure --prefix=$HDF5_HOME --enable-parallel \
-   && make -j 20 \
-   && make install \
-   && cd /tmp \
-   && rm -rf hdf5
+    && cd hdf5 \
+    && CC=mpicc ./configure --prefix=$HDF5_HOME --enable-parallel \
+    && make -j 20 \
+    && make install \
+    && cd /tmp \
+    && rm -rf hdf5
 
 # Set environment variables
 ENV PATH=/opt/qmcpack/bin:$PATH:$HDF5_HOME/bin:$PATH \
@@ -36,7 +36,7 @@ RUN apt-get update && \
 # Clone and build LSMS
 WORKDIR /opt
 RUN git clone https://github.com/mstsuite/lsms.git
-COPY ./toolchain/hpcfund-rocm-hip.cmake /opt/lsms/toolchain/hpcfund-rocm-hip.cmake
+COPY ./hpcfund-rocm-hip.cmake /opt/lsms/toolchain/hpcfund-rocm-hip.cmake
 
 WORKDIR /opt/lsms
 RUN mkdir build

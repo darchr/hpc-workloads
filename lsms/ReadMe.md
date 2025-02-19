@@ -1,89 +1,82 @@
 # LSMS Project Documentation
 
 ## Description
+
 This project involves docs for running the LSMS code. A Docker image has been created to run the project on x86 machines, specifically tested on Amarillo.
 
-## Steps to Run the Project for CPU only (Use DockerFile: Dockerfile-cpu)
+## Steps to Run the Project for CPU and GPU (Nvidia).
 
 ### 1. Build the Docker Image
+
+NOTE: Use either the CPU or GPU dockerfile depending on your requirements.
+
 To build the Docker image, execute the following command in the directory containing the Dockerfile:
+
 ```bash
-docker build -t lsms-docker .
+# CPU-only dockerfile
+docker build -f Dockerfile.cpu -t lsms-docker .
+
+# CPU+GPU dockerfile
+docker build -f Dockerfile.gpu-nvidia -t lsms-docker-gpu .
 ```
 
 ### 2. Run the Docker Container
-Start the container in detached mode with automatic restart enabled:
+
+Start the container in interactive mode (open shell in docker container).
+
 ```bash
-docker run -d --restart unless-stopped lsms-docker
+# CPU-only container
+docker run -it --name lsms-cpu lsms-docker bash
+
+# CPU+GPU container
+docker run -it --name lsms-gpu --gpus all lsms-docker-gpu bash
 ```
 
-### 3. Open Bash in the Docker Container
-Access the container’s bash shell:
-```bash
-docker exec -it <container_id> bash
-```
-Replace `<container_id>` with the actual container ID or name.
+### 3. Navigate to Configuration Files
 
-### 4. Navigate to Configuration Files
 Once inside the container, navigate to the directory containing configuration files:
+
 ```bash
 cd /usr/src/app/lsms/Test/
 ```
 
-### 5. Select the Workload Directory
+### 4. Select the Workload Directory
+
 This directory contains multiple workloads. Navigate to the specific directory with the `i_lsms` file for your desired element.
 
-### 6. Run the LSMS Project
+### 5. Run the LSMS Project
+
 Run the LSMS simulation with the following command:
+
 ```bash
 mpirun --allow-run-as-root -np 1 /usr/src/app/build_lsms/bin/lsms i_lsms
 ```
 
 Ensure the `i_lsms` file is present in the current directory before running the command.
 
-## Steps to Run the Project for GPU (Use DockerFile: Dockerfile-gpu-nvidia)
+### 6. Exit and stop docker container.
 
-### 1. Build the Docker Image
-To build the Docker image, execute the following command in the directory containing the Dockerfile:
+You can exit the docker container using the exit command.
+
 ```bash
-docker build -t lsms-gpu .
+# Exit and stop container
+exit
+
+# Delete CPU-only container (lsms-cpu is the name of the container, you can also use the container id)
+docker container rm lsms-cpu
+
+# Delete CPU+GPU container (lsms-gpu is the name of the container, you can also use the container id)
+docker container rm lsms-gpu
 ```
-
-### 2. Run the Docker Container
-```bash
-docker run --gpus all -dit --name lsms-container lsms-gpu
-```
-
-### 3. Open Bash in the Docker Container
-Access the container’s bash shell:
-```bash
-docker exec -it <container_id> bash
-```
-Replace `<container_id>` with the actual container ID or name.
-
-### 4. Navigate to Configuration Files
-Once inside the container, navigate to the directory containing configuration files:
-```bash
-cd /usr/src/app/lsms/Test/
-```
-
-### 5. Select the Workload Directory
-This directory contains multiple workloads. Navigate to the specific directory with the `i_lsms` file for your desired element.
-
-### 6. Run the LSMS Project
-Run the LSMS simulation with the following command:
-```bash
-/usr/src/app/build_lsms/bin/lsms i_lsms
-```
-
-Ensure the `i_lsms` file is present in the current directory before running the command.
 
 # Code Description
 
 ## Introduction
-The LSMS  code is a computational tool designed for first-principles calculations of the electronic structure of materials. Using **density functional theory (DFT)** and **multiple scattering theory**, LSMS enables the simulation of material properties such as magnetism, electronic structure, and chemical bonding at the atomic scale.
+
+The LSMS code is a computational tool designed for first-principles calculations of the electronic structure of materials. Using **density functional theory (DFT)** and **multiple scattering theory**, LSMS enables the simulation of material properties such as magnetism, electronic structure, and chemical bonding at the atomic scale.
 
 ### Key Features
+
 - **Muffin-Tin Approximation (MT)**:
   - Divides space into spherical regions around atoms (muffin-tin regions) and an interstitial region.
   - Simplifies calculations of electron densities and potentials.
@@ -96,14 +89,18 @@ The LSMS  code is a computational tool designed for first-principles calculation
   - Handles spin-polarized systems for studying magnetic properties.
 
 ## Purpose of the Code
+
 The LSMS code is used to:
+
 1. Calculate the electronic structure of materials.
 2. Determine magnetic properties, such as the magnetic moment of atoms.
 3. Compute the total energy of the system, which is critical for stability analysis.
 4. Analyze the interaction between atoms in the system.
 
 ## Output Details
+
 The output from LSMS includes:
+
 - **Total Energy**: The energy of the system (reported in Rydbergs).
 - **Fermi Energy**: The energy level at which electron states are filled.
 - **Band Energy**: The contribution of band electrons to the system's total energy.
