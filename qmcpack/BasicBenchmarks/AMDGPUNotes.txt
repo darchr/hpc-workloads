@@ -1,0 +1,37 @@
+
+
+LOGICAL GPU Architecture is made of the following:
+
+Thread - Smallest unit
+Block = Made of threads (our virtual gpu handles 256 threads per block)
+Grid - Made of blocks
+
+The HIP programs will require the hip compiler. 
+The HIP compiler can compile for both ROCm and CUDA code.
+
+The benchmarks must be cross compiled to be loaded into Gem5 simulator.
+Gem5 simulator is based on x86 architecture with the GPU variant
+having the Vega based GPU. 
+
+If the benchmarks need to be run in your local machine. It will require
+the following:
+- MPI compiler
+- OMP libraries
+- ROCm libraries
+
+Local build:
+Compiling with MPI requires the following;
+- mpicxx my_mpi_program.cpp -o my_mpi_program
+
+Compile with omp:
+- g++ omp_test.cpp -o omp_test -fopenmp
+
+Compile with hip:
+- hipcc my_hip_program.cpp -o my_hip_program
+
+Compile hip with OMP:
+- hipcc hip_omp_hybrid.cpp -o hybrid_test -fopenmp
+
+
+To compile with the cross compiler, follow the example shown in the
+resources folder for gem5 resources.
