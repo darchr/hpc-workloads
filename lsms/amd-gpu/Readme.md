@@ -22,7 +22,7 @@ docker build -t rocm_gpu:6.3 -f /path/to/Dockerfile-rocm-base .
 
 - Run build command ``` docker build -t lsms-amd-gpu . ```
 
-- Run container with command ``` docker run --rm -it --device=/dev/kfd --device=/dev/dri/renderD128 --group-add video lsms-amd-gpu ```
+- Run container with command ``` docker run --rm -it --device=/dev/kfd --device=/dev/dri --group-add video --gpus all lsms-amd-gpu ```
 
 - You will be in exec terminal inside container after this. In this container go to path for element i_lsms file.
 
