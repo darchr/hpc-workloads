@@ -1,0 +1,17 @@
+AMD has released its ISA for VEGA GPUS
+- https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/gcn3-instruction-set-architecture.pdf
+
+The GPU model was created by a team of researchers from AMD and Purdue:
+- https://jiemingyin.github.io/docs/HPCA2018.pdf
+
+They show in the paper how they modelled the current GPU component. 
+
+To build the CXL component, I'll use the ISA documentation and figure out how it works
+- https://computeexpresslink.org/wp-content/uploads/2024/02/CXL-3.1-Specification.pdf
+
+CXL would be another device that is added via the PCIe slots in the Gem5 model. 
+It would require the creation of another component that contained memory units of CXL.
+
+This will also require that some other components in the Gem5 model be updated to make them
+"aware" of the CXL memory device 
+
