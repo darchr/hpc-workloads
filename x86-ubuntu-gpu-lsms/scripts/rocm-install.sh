@@ -260,8 +260,8 @@ cd build_lsms
 cmake ../lsms \
     -DCMAKE_PREFIX_PATH=/opt/rocm \
     -DCMAKE_TOOLCHAIN_FILE="../lsms/toolchain/hpcfund-rocm-hip.cmake" \
-    -DCMAKE_CXX_COMPILER=/opt/rocm/bin/hipcc \
-    -DCMAKE_C_COMPILER=/opt/rocm/bin/hipcc \
+    -DCMAKE_CXX_COMPILER=$ROCM_PATH/bin/hipcc \
+    -DCMAKE_C_COMPILER=$ROCM_PATH/bin/hipcc \
     -DBLAS_LIBRARIES=/usr/lib/x86_64-linux-gnu/libblas.so \
     -DLAPACK_LIBRARIES=/usr/lib/x86_64-linux-gnu/liblapack.so
 
