@@ -244,8 +244,7 @@ export export PATH=$PATH:$HDF5_PATH \
     HSA_XNACK=1 \
     OMPX_APU_MAPS=1 \
     OMP_NUM_THREADS=4 \
-    AMDDeviceLibs_DIR=$ROCM_PATH/lib/cmake \
-    PYTHONPATH=/tmp/qmcpack/nexus/lib:$PYTHONPATH
+    AMDDeviceLibs_DIR=$ROCM_PATH/lib/cmake
 
 
 # LSMS Setup
