@@ -66,4 +66,4 @@ You can have a look at the `lsms_gpu.sh` file to see the script to run an LSMS t
 
 ## TO-DO
 
-Currently this build is still incomplete since LSMS crashes during execution. First we must locate the source of the problem: Dependencies, UCX, OpenMPI, ROCm, or LSMS and then try to fix the issue.
+LSMS currently runs on the GPU and can execute test workloads. However further testing must be done on the stability and speed, since the processing speed is very slow. Some test workloads such as Au/ and Cu/ can cause CPU lockups as well.

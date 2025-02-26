@@ -39,13 +39,16 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     python3-pip \
     scons\
     gpg \
-    libopenblas-dev \
+    libblas-dev \
+    liblapack-dev \
     libfftw3-dev \
     libxml2-dev \
     libboost-dev \
     libreadline-dev \
     pkg-config \
-    libhdf5-dev
+    libxc-dev \
+    lua5.4 \
+    liblua5.4-dev
 apt-get clean
 
 # Remove the motd
@@ -85,7 +88,7 @@ sudo chmod 777 /root/roms
 export UCX_BRANCH="v1.17.0" \
 UCC_BRANCH="v1.3.0" \
 OMPI_BRANCH="v5.0.5" \
-GPU_TARGET="gfx908,gfx90a,gfx942"
+GPU_TARGET="gfx90a,gfx942,gfx906"
 
 # Make the directory if it doesn't exist yet.
 # This location is recommended by the distribution maintainers.
@@ -222,19 +225,17 @@ mpirun hostname
 
 # HDF5 installaton
 echo "Installing HDF5"
-export HDF5_PATH=/opt/hdf5
+export HDF5_PATH=/usr/local/hdf5
 cd /tmp
 git clone --recursive https://github.com/HDFGroup/hdf5.git -b hdf5-1_14_1 
 cd hdf5 
 CC=$OMPI_PATH/bin/mpicc ./configure --prefix=$HDF5_PATH --enable-parallel 
 make -j 24
 make install 
-cd /tmp 
-rm -rf hdf5
 echo "HDF5 installed"
 
 
-export  PATH=/opt/qmcpack/bin:$PATH:$HDF5_PATH/bin:$PATH \
+export export PATH=$PATH:$HDF5_PATH \
     LD_LIBRARY_PATH=$HDF5_PATH/lib:$LD_LIBRARY_PATH \
     LIBRARY_PATH=$HDF5_PATH/lib:$LIBRARY_PATH \
     C_INCLUDE_PATH=$HDF5_PATH/include:$C_INCLUDE_PATH \
@@ -261,8 +262,8 @@ cmake ../lsms \
     -DCMAKE_TOOLCHAIN_FILE="../lsms/toolchain/hpcfund-rocm-hip.cmake" \
     -DCMAKE_CXX_COMPILER=/opt/rocm/bin/hipcc \
     -DCMAKE_C_COMPILER=/opt/rocm/bin/hipcc \
-    -DBLAS_LIBRARIES=/usr/lib/x86_64-linux-gnu/libopenblas.so \
-    -DLAPACK_LIBRARIES=/usr/lib/x86_64-linux-gnu/libopenblas.so
+    -DBLAS_LIBRARIES=/usr/lib/x86_64-linux-gnu/libblas.so \
+    -DLAPACK_LIBRARIES=/usr/lib/x86_64-linux-gnu/liblapack.so
 
 cmake --build . --parallel
 echo "LSMS built"
