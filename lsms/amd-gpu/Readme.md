@@ -29,11 +29,11 @@ docker build -f Dockerfile.gpu-amd -t lsms-amd-gpu .
 - Run container in integrated mode (open container shell)
 
 ```bash
-docker run --rm -it --device=/dev/kfd --device=/dev/dri/renderD128 --group-add video lsms-amd-gpu
+docker run --rm -it --device=/dev/kfd --device=/dev/dri --group-add video --gpus all lsms-amd-gpu
 ```
 
-- Find simulation with i_lsms file. Run simulation with command.
+- Find simulation in the `/opt/lsms/Test/` directory. Run simulation with command.
 
 ```bash
-/opt/lsms/build/lsms i_lsms
+/opt/lsms/build/bin/lsms i_lsms
 ```
